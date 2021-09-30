@@ -22,6 +22,13 @@ class DiceControllerTests {
 	@Autowired
 	private MockMvc mockMvc;
 
+	//@Test
+	//@Order(1)
+	//void dicerolltotalcleanup() throws Exception {
+	//	mockMvc.perform(MockMvcRequestBuilders.delete("/dicerolltotal?nSides=5&nDice=2").accept(MediaType.APPLICATION_JSON))
+	//			.andExpect(status().isOk());
+	//}
+
 	@Test
 	@Order(2)
 	void contextLoads() {
@@ -66,4 +73,32 @@ class DiceControllerTests {
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isBadRequest());
 	}
+
+	@Test
+	@Order(8)
+	void diceControllerDicerollTotalPresentReturnsAvailableData() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/dicerolltotal?nSides=5&nDice=2").accept(MediaType.APPLICATION_JSON))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk())
+				.andExpect(content().string(not(equalTo("No data available"))));
+	}
+
+	@Test
+	@Order(9)
+	void diceControllerDicerollTotalAbsentReturnsNoDataAvailable() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/dicerolltotal?nSides=10&nDice=10").accept(MediaType.APPLICATION_JSON))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk())
+				.andExpect(content().string(equalTo("No data available")));
+	}
+
+	@Test
+	@Order(10)
+	void diceControllerDicerollTotalPercentagePresentReturnsAvailableData() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/dicerolltotalpercentage?nSides=5&nDice=2").accept(MediaType.APPLICATION_JSON))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk())
+				.andExpect(content().string(not(equalTo("No data available"))));
+	}
+
 }
